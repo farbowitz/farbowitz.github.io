@@ -12,275 +12,177 @@
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Georgia', 'Times New Roman', serif;
             line-height: 1.6;
-            color: #2c3e50;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            color: #333;
+            background: #f8f9fa;
             padding: 20px;
         }
 
         .resume-container {
-            max-width: 900px;
+            max-width: 850px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            animation: slideUp 0.8s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
         }
 
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: #2c3e50;
             color: white;
             padding: 40px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shimmer 3s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .header h1 {
-            font-size: 3em;
+            font-size: 2.5em;
             margin-bottom: 10px;
-            font-weight: 700;
-            position: relative;
-            z-index: 2;
+            font-weight: normal;
+            letter-spacing: 1px;
         }
 
         .header p {
-            font-size: 1.2em;
+            font-size: 1.1em;
             margin-bottom: 20px;
             opacity: 0.9;
-            position: relative;
-            z-index: 2;
+            font-style: italic;
         }
 
         .contact-info {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 30px;
             flex-wrap: wrap;
-            position: relative;
-            z-index: 2;
+            font-size: 0.95em;
         }
 
         .contact-item {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
         }
 
         .contact-item:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            opacity: 1;
         }
 
         .content {
-            padding: 40px;
+            padding: 40px 50px;
         }
 
         .section {
-            margin-bottom: 40px;
-            animation: fadeInUp 0.6s ease-out forwards;
-            opacity: 0;
+            margin-bottom: 35px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 30px;
         }
 
-        .section:nth-child(1) { animation-delay: 0.1s; }
-        .section:nth-child(2) { animation-delay: 0.2s; }
-        .section:nth-child(3) { animation-delay: 0.3s; }
-        .section:nth-child(4) { animation-delay: 0.4s; }
-        .section:nth-child(5) { animation-delay: 0.5s; }
-        .section:nth-child(6) { animation-delay: 0.6s; }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
         }
 
         .section-title {
-            font-size: 1.8em;
-            color: #1e3c72;
+            font-size: 1.4em;
+            color: #2c3e50;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid;
-            border-image: linear-gradient(90deg, #667eea, #764ba2) 1;
-            position: relative;
-            font-weight: 600;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 2px;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            display: inline-block;
         }
 
         .summary {
-            font-size: 1.1em;
-            line-height: 1.8;
-            color: #34495e;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 5px solid #667eea;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            font-size: 1.05em;
+            line-height: 1.7;
+            color: #444;
+            text-align: justify;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            font-style: italic;
         }
 
-        .skills-grid {
+        .skills-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
         }
 
         .skill-category {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: #f8f9fa;
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(102, 126, 234, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .skill-category:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e0e0e0;
         }
 
         .skill-category h4 {
-            color: #1e3c72;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .skill-tag {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .skill-tag:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 10px rgba(102, 126, 234, 0.3);
+        .skill-list {
+            color: #555;
+            line-height: 1.6;
+            font-size: 0.95em;
         }
 
         .experience-item, .education-item, .project-item {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border-left: 5px solid #667eea;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 25px;
+            padding: 20px 0;
+            border-bottom: 1px dotted #ccc;
         }
 
-        .experience-item::before, .education-item::before, .project-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.05), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .experience-item:hover::before, .education-item:hover::before, .project-item:hover::before {
-            left: 100%;
-        }
-
-        .experience-item:hover, .education-item:hover, .project-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        .experience-item:last-child, .education-item:last-child, .project-item:last-child {
+            border-bottom: none;
         }
 
         .item-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
         }
 
         .item-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #1e3c72;
-            margin-bottom: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 3px;
         }
 
         .item-company {
-            font-size: 1.1em;
-            color: #667eea;
-            font-weight: 500;
+            font-size: 1.05em;
+            color: #3498db;
+            font-style: italic;
         }
 
         .item-date {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #34495e;
             color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 6px 12px;
             font-size: 0.9em;
-            font-weight: 500;
+            font-weight: normal;
+            border: 1px solid #2c3e50;
             white-space: nowrap;
         }
 
         .item-location {
-            color: #7f8c8d;
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 12px;
             font-style: italic;
-            margin-bottom: 15px;
+        }
+
+        .item-description {
+            color: #444;
+            line-height: 1.6;
         }
 
         .item-description ul {
@@ -289,66 +191,108 @@
         }
 
         .item-description li {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             padding-left: 20px;
             position: relative;
-            color: #34495e;
         }
 
         .item-description li::before {
-            content: '▸';
+            content: '•';
             position: absolute;
             left: 0;
-            color: #667eea;
+            color: #3498db;
             font-weight: bold;
+            font-size: 1.2em;
         }
 
-        .certifications {
-            display: flex;
-            flex-wrap: wrap;
+        .research-highlight {
+            background: #ecf0f1;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #e74c3c;
+            font-style: italic;
+        }
+
+        .certifications-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
+            margin-top: 15px;
         }
 
         .certification {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 25px;
+            background: #ecf0f1;
+            padding: 12px 15px;
+            border: 1px solid #bdc3c7;
+            text-align: center;
+            color: #2c3e50;
             font-weight: 500;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s ease;
+            font-size: 0.95em;
         }
 
-        .certification:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
         }
 
-        .interests {
+        .project-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .project-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .project-year {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .interests-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
+            margin-top: 15px;
         }
 
         .interest {
-            background: rgba(102, 126, 234, 0.1);
-            color: #1e3c72;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 500;
-            border: 2px solid rgba(102, 126, 234, 0.2);
-            transition: all 0.3s ease;
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 8px 15px;
+            border: 1px solid #bdc3c7;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
         }
 
         .interest:hover {
-            background: rgba(102, 126, 234, 0.2);
-            transform: scale(1.05);
+            background: #d5dbdb;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #fdcb6e;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .highlight-text {
+            color: #856404;
+            font-weight: 500;
         }
 
         @media (max-width: 768px) {
             .resume-container {
                 margin: 10px;
-                border-radius: 15px;
             }
 
             .header {
@@ -356,20 +300,16 @@
             }
 
             .header h1 {
-                font-size: 2.2em;
+                font-size: 2em;
             }
 
             .content {
-                padding: 30px 20px;
+                padding: 30px 25px;
             }
 
             .contact-info {
-                gap: 10px;
-            }
-
-            .contact-item {
-                font-size: 0.8em;
-                padding: 6px 12px;
+                gap: 15px;
+                font-size: 0.9em;
             }
 
             .item-header {
@@ -377,8 +317,28 @@
                 align-items: flex-start;
             }
 
-            .skills-grid {
+            .skills-container {
                 grid-template-columns: 1fr;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .resume-container {
+                box-shadow: none;
+                border: none;
+            }
+
+            .section {
+                page-break-inside: avoid;
             }
         }
     </style>
@@ -387,12 +347,12 @@
     <div class="resume-container">
         <div class="header">
             <h1>D. Alec Farbowitz</h1>
-            <p>Melbourne Beach, Florida, United States</p>
+            <p>Researcher in Nanofabrication, Materials, and Data Science</p>
             <div class="contact-info">
+                <div class="contact-item">Melbourne Beach, Florida</div>
                 <div class="contact-item">farbowitz@gmail.com</div>
                 <div class="contact-item">linkedin.com/in/daniel-farbowitz</div>
                 <div class="contact-item">farbowitz.github.io</div>
-                <div class="contact-item">github.com/farbowitz</div>
             </div>
         </div>
 
@@ -400,112 +360,40 @@
             <div class="section">
                 <h2 class="section-title">Summary</h2>
                 <div class="summary">
-                    Highly motivated researcher with diverse background in nanofabrication, renewable energy, and data analysis. Strong foundation in physics, mathematics, and solar cell technology with expertise in Python, R, and statistical modeling. Seeking to apply analytical skills and continuous learning approach to data-driven projects, particularly within the renewables sector.
+                    A dedicated, lifelong learner in physics and mathematics, and an empathetic and talented technical communicator. I have fabrication experience in silicon optoelectromechanical devices and organic nanoparticle ink solar cells and data analysis experience across multiple disciplines. Seeking to apply analytical skills and continuous learning approach to data-driven projects, particularly within the renewables sector.
                 </div>
             </div>
 
             <div class="section">
                 <h2 class="section-title">Technical Skills</h2>
-                <div class="skills-grid">
+                <div class="skills-container">
                     <div class="skill-category">
                         <h4>Programming Languages</h4>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Python</span>
-                            <span class="skill-tag">R</span>
-                            <span class="skill-tag">SQL</span>
-                            <span class="skill-tag">C++</span>
-                            <span class="skill-tag">HTML</span>
-                            <span class="skill-tag">MATLAB</span>
+                        <div class="skill-list">
+                            <strong>Python:</strong> Pandas, SciPy, Scikit-learn, Matplotlib, Seaborn, NLTK, BeautifulSoup, Selenium, PySimpleGUI, xarray, lmfit, pyglotaran<br>
+                            <strong>R:</strong> ggplot2, dplyr, tidyverse, lubridate, modelr<br>
+                            <strong>Other:</strong> SQL, C++, HTML, MATLAB
                         </div>
                     </div>
                     <div class="skill-category">
                         <h4>Data Analysis & Modeling</h4>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Statistical Modeling</span>
-                            <span class="skill-tag">Machine Learning</span>
-                            <span class="skill-tag">Time-Series Analysis</span>
-                            <span class="skill-tag">PCA</span>
-                            <span class="skill-tag">NLP</span>
+                        <div class="skill-list">
+                            Statistical Modeling (Regression, ANOVA, t-tests, Chi-Square, MANOVA, Kolmogorov-Smirnov), Time-Series Analysis, Principal Component Analysis, Decision Trees, K-Nearest Neighbors, Machine Learning, Natural Language Processing
                         </div>
                     </div>
                     <div class="skill-category">
                         <h4>Software & Tools</h4>
-                        <div class="skill-tags">
-                            <span class="skill-tag">COMSOL</span>
-                            <span class="skill-tag">LabVIEW</span>
-                            <span class="skill-tag">LaTeX</span>
-                            <span class="skill-tag">Jupyter</span>
-                            <span class="skill-tag">Git</span>
-                            <span class="skill-tag">Linux/Unix</span>
+                        <div class="skill-list">
+                            MATLAB, Mathematica, COMSOL Multiphysics, LabVIEW, Git, Linux/Unix, LaTeX, Jupyter Notebooks
                         </div>
                     </div>
                     <div class="skill-category">
                         <h4>Laboratory & Fabrication</h4>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Nanofabrication</span>
-                            <span class="skill-tag">UV Lithography</span>
-                            <span class="skill-tag">E-beam Lithography</span>
-                            <span class="skill-tag">Clean Room</span>
-                            <span class="skill-tag">SEM</span>
-                            <span class="skill-tag">Spectroscopy</span>
+                        <div class="skill-list">
+                            <strong>Nanofabrication:</strong> UV lithography, E-beam lithography, Physical vapor deposition, Chemical vapor deposition, Plasma enhanced chemical vapor deposition, Reactive ion etching, HF wet etching, Focused ion beam (FIB), Clean room protocols (Class 10/100/1000), Spin coating, Dicing, Lift-off processes, Vacuum systems<br>
+                            <strong>Characterization:</strong> Photoluminescence and UV-Vis spectroscopy, Optical and Scanning electron microscopy<br>
+                            <strong>Optics:</strong> Photonic device design, Photonic nanocavities, Ultrafast transient absorption spectroscopy, Time-resolved spectroscopy, Global analysis, Optical alignment
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title">Professional Experience</h2>
-                
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div>
-                            <div class="item-title">Assistant</div>
-                            <div class="item-company">Sue Torres (Professional Chef)</div>
-                        </div>
-                        <div class="item-date">November 2024 – Present</div>
-                    </div>
-                    <div class="item-location">Vero Beach, Florida</div>
-                    <div class="item-description">
-                        <ul>
-                            <li>Provide setup, cooking, and plating assistance for catering operations</li>
-                            <li>Resurrected and maintained previously defunct business website</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div>
-                            <div class="item-title">Adjunct Instructor</div>
-                            <div class="item-company">Benjamin Franklin Institute of Technology</div>
-                        </div>
-                        <div class="item-date">January 2019 – June 2021</div>
-                    </div>
-                    <div class="item-location">Boston, Massachusetts</div>
-                    <div class="item-description">
-                        <ul>
-                            <li>Developed curriculum content and delivered remote learning materials for undergraduate mathematics and physics courses</li>
-                            <li>Implemented weekly discussion board component to foster student engagement and critical thinking</li>
-                            <li>Created and facilitated student-led faculty governance body focused on accountability and equitable education</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="experience-item">
-                    <div class="item-header">
-                        <div>
-                            <div class="item-title">Physics & Mathematics Tutor</div>
-                            <div class="item-company">Arbor Tutoring</div>
-                        </div>
-                        <div class="item-date">March 2011 – December 2018</div>
-                    </div>
-                    <div class="item-location">Allston, Massachusetts</div>
-                    <div class="item-description">
-                        <ul>
-                            <li>Provided individualized tutoring in physics and mathematics to university students</li>
-                            <li>Developed tailored learning plans and provided ongoing academic support</li>
-                            <li>Achieved minimum one letter grade improvement for all students</li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -544,13 +432,32 @@
                             <li>Focused on development and testing of advanced solar cell materials</li>
                             <li>Conducted comprehensive review on organic bulk heterojunction and nanoparticle solar cells</li>
                         </ul>
+                        <div class="research-highlight">
+                            <strong>Dissertation:</strong> "Ultrafast Spectroscopy Revealing the Charge and Excitonic Properties of Nanoparticle Ink Solar Cells"
+                        </div>
                     </div>
                 </div>
 
                 <div class="education-item">
                     <div class="item-header">
                         <div>
-                            <div class="item-title">BS Physics, BS Mathematics</div>
+                            <div class="item-title">Photonics Graduate Studies</div>
+                            <div class="item-company">Johns Hopkins University</div>
+                        </div>
+                        <div class="item-date">September 2019 – June 2020</div>
+                    </div>
+                    <div class="item-location">Baltimore, Maryland</div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Studied light-matter interactions at the nanoscale</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="education-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">BS Physics, BS Mathematics, BA Philosophy</div>
                             <div class="item-company">Penn State University</div>
                         </div>
                         <div class="item-date">2007 – 2011</div>
@@ -560,36 +467,86 @@
             </div>
 
             <div class="section">
-                <h2 class="section-title">Key Projects</h2>
+                <h2 class="section-title">Research & Projects</h2>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-title">American Anthropologist Journal Meta-Analysis</div>
+                        <div class="project-year">2024</div>
+                        <div class="item-description">
+                            Working with American Anthropologist, currently analyzing publishing trends in its 133-year history using the pyResearchInsights library. Utilized machine learning, regression analysis, and NLP to identify trends across 6000+ academic articles.
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">Mass Spectroscopy Analysis Automation via PCA</div>
+                        <div class="project-year">2023</div>
+                        <div class="item-description">
+                            Developed Python code to analyze MALDI-TOF XML and text data outputs (6000+ files). Implemented data merging and cleaning for species identification, with visualizations using auto-correlation techniques for biomarker identification in salmon and trout.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Professional Experience</h2>
                 
-                <div class="project-item">
+                <div class="experience-item">
                     <div class="item-header">
                         <div>
-                            <div class="item-title">American Anthropologist Journal Meta-Analysis</div>
+                            <div class="item-title">Adjunct Instructor</div>
+                            <div class="item-company">Benjamin Franklin Institute of Technology</div>
                         </div>
-                        <div class="item-date">2024</div>
+                        <div class="item-date">January 2019 – June 2021</div>
                     </div>
+                    <div class="item-location">Boston, Massachusetts</div>
                     <div class="item-description">
                         <ul>
-                            <li>Scraped web data and analyzed 133-year journal history using PyResearchInsights library</li>
-                            <li>Utilized machine learning, regression analysis, and NLP to identify publishing trends</li>
-                            <li>Analyzed dataset of 6000+ academic articles for trend identification</li>
+                            <li>Developed curriculum content and delivered remote learning materials for undergraduate mathematics and physics courses</li>
+                            <li>Implemented weekly discussion board component to foster student engagement and critical thinking</li>
+                            <li>Created and facilitated student-led faculty governance body focused on accountability and equitable education</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="project-item">
+                <div class="experience-item">
                     <div class="item-header">
                         <div>
-                            <div class="item-title">Mass Spectroscopy Analysis Automation via PCA</div>
+                            <div class="item-title">Physics & Mathematics Tutor</div>
+                            <div class="item-company">Arbor Tutoring</div>
                         </div>
-                        <div class="item-date">2023</div>
+                        <div class="item-date">March 2011 – December 2018</div>
+                    </div>
+                    <div class="item-location">Allston, Massachusetts</div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Provided individualized tutoring in physics and mathematics to university students</li>
+                            <li>Developed tailored learning plans and achieved minimum one letter grade improvement for all students</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Professional Development</h2>
+                
+                <div class="highlight-box">
+                    <div class="highlight-text">
+                        <strong>Current:</strong> MITx Online courses in Data Science, Economics, and Policy Development (August 2024 – March 2025)
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title">Student Representative (Physics PGT)</div>
+                            <div class="item-company">University of Sheffield</div>
+                        </div>
+                        <div class="item-date">November 2020 – September 2021</div>
                     </div>
                     <div class="item-description">
                         <ul>
-                            <li>Developed Python code to analyze MALDI-TOF XML and text data outputs (6000+ files)</li>
-                            <li>Implemented data merging and cleaning for species identification</li>
-                            <li>Created visualizations using auto-correlation techniques for biomarker identification</li>
+                            <li>Addressed postgraduate physics student concerns with academic administration</li>
+                            <li>Contributed to Equality, Diversity, and Inclusion Committee</li>
                         </ul>
                     </div>
                 </div>
@@ -597,7 +554,7 @@
 
             <div class="section">
                 <h2 class="section-title">Certifications & Honors</h2>
-                <div class="certifications">
+                <div class="certifications-container">
                     <div class="certification">Clean Room Certification</div>
                     <div class="certification">Laser Safety Certification</div>
                     <div class="certification">Chemical Handling Safety</div>
@@ -607,17 +564,16 @@
             </div>
 
             <div class="section">
-                <h2 class="section-title">Additional Interests</h2>
-                <div class="interests">
-                    <div class="interest">Muay Thai</div>
-                    <div class="interest">Brazilian Jiu-Jitsu</div>
-                    <div class="interest">Mixed Martial Arts</div>
-                    <div class="interest">AcroYoga</div>
-                    <div class="interest">Hip Hop</div>
-                    <div class="interest">Powerlifting</div>
+                <h2 class="section-title">Personal Interests</h2>
+                <div class="interests-container">
+                    <div class="interest">Hip Hop Music and Dance</div>
+                    <div class="interest">Travel</div>
                     <div class="interest">Basketball</div>
+                    <div class="interest">Fitness</div>
+                    <div class="interest">Digital Privacy</div>
+                    <div class="interest">Education for All</div>
+                    <div class="interest">Mixed Martial Arts</div>
                     <div class="interest">Piano</div>
-                    <div class="interest">Music</div>
                 </div>
             </div>
         </div>
