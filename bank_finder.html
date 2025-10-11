@@ -342,6 +342,7 @@
                 <div class="form-group">
                     <label for="radius">Search Radius:</label>
                     <select id="radius">
+                        <option value="10">10 km</option>
                         <option value="25">25 km</option>
                         <option value="50">50 km</option>
                         <option value="100">100 km</option>
@@ -434,10 +435,8 @@
         function matchBankName(bankName, countryCode) {
             const normalized = normalizeText(bankName);
             
-            // Stricter matching - require at least 3 characters after normalization
-            if (normalized.length < 3) return null;
-            
-            const commonTerms = ['bank', 'banco', 'credit union', 'federal credit union', 'fcu', 'cu', 'national', 'trust', 'savings', 'financial'];
+            // Very strict matching - require at least 5 characters
+            if (normalized.length < 5) return null;
             
             for (const rating of bankRatings) {
                 // Check if bank has country data and if it matches
@@ -450,31 +449,9 @@
                 
                 const ratingName = normalizeText(rating.name);
                 
-                // Exact match
-                if (ratingName === normalized) return rating;
-                
-                // Remove common banking terms for comparison
-                let searchName = normalized;
-                let ratingSearchName = ratingName;
-                
-                for (const term of commonTerms) {
-                    searchName = searchName.replace(new RegExp('\\b' + term + '\\b', 'g'), '').replace(/\s+/g, ' ').trim();
-                    ratingSearchName = ratingSearchName.replace(new RegExp('\\b' + term + '\\b', 'g'), '').replace(/\s+/g, ' ').trim();
-                }
-                
-                // Require at least 4 characters to match after term removal
-                if (searchName.length < 4 || ratingSearchName.length < 4) continue;
-                
-                // Only match if the core name is very similar (at least 80% of the shorter name matches)
-                if (searchName === ratingSearchName) {
+                // Require exact match only (case insensitive)
+                if (ratingName === normalized) {
                     return rating;
-                } else if (searchName.length > 0 && ratingSearchName.length > 0) {
-                    const minLength = Math.min(searchName.length, ratingSearchName.length);
-                    if (searchName.includes(ratingSearchName) && ratingSearchName.length >= minLength * 0.8) {
-                        return rating;
-                    } else if (ratingSearchName.includes(searchName) && searchName.length >= minLength * 0.8) {
-                        return rating;
-                    }
                 }
             }
             return null;
@@ -688,16 +665,38 @@
                     map = L.map('map', {
                         preferCanvas: true,
                         zoomControl: true
-                    }).setView([location.lat, location.lon], 11);
+                    }).setView([location.lat, location.lon], 13);
+                    
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '© OpenStreetMap contributors',
                         maxZoom: 19,
-                        keepBuffer: 4,
+                        minZoom: 8,
+                        keepBuffer: 8,
                         updateWhenZooming: false,
-                        updateWhenIdle: true
+                        updateWhenIdle: true,
+                        tileSize: 256
                     }).addTo(map);
+                    
+                    // Preload tiles at multiple zoom levels
+                    const preloadZooms = [10, 11, 12, 13, 14, 15];
+                    preloadZooms.forEach(zoom => {
+                        const bounds = map.getBounds();
+                        const ne = bounds.getNorthEast();
+                        const sw = bounds.getSouthWest();
+                        
+                        // Calculate tile coordinates for this zoom level
+                        for (let x = Math.floor((sw.lng + 180) / 360 * Math.pow(2, zoom)); 
+                             x <= Math.floor((ne.lng + 180) / 360 * Math.pow(2, zoom)); x++) {
+                            for (let y = Math.floor((1 - Math.log(Math.tan(ne.lat * Math.PI / 180) + 1 / Math.cos(ne.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom)); 
+                                 y <= Math.floor((1 - Math.log(Math.tan(sw.lat * Math.PI / 180) + 1 / Math.cos(sw.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom)); y++) {
+                                // Preload tile
+                                const img = new Image();
+                                img.src = `https://a.tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
+                            }
+                        }
+                    });
                 } else {
-                    map.setView([location.lat, location.lon], 11);
+                    map.setView([location.lat, location.lon], 13);
                 }
 
                 if (markersLayer) {
