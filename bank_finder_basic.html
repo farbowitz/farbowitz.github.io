@@ -52,26 +52,6 @@
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
         }
 
-        .file-input-group {
-            margin-bottom: 1rem;
-        }
-
-        .file-input-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #4b5563;
-        }
-
-        .file-input-group input[type="file"] {
-            display: block;
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            background: white;
-            width: 100%;
-        }
-
         .search-form {
             display: grid;
             gap: 1.5rem;
@@ -285,9 +265,49 @@
             padding: 2rem;
             color: #6b7280;
         }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .spinner {
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #40916c;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h2 style="color: #2d6a4f;">Loading Bank Data...</h2>
+            <p style="color: #6b7280;">Please wait while we load the database</p>
+        </div>
+    </div>
+
     <div class="header">
         <h1>🌱 Bank.Green - Find Sustainable Banks Near You</h1>
         <p>Discover environmentally responsible banking options in your area</p>
@@ -295,38 +315,26 @@
 
     <div class="container">
         <div class="search-card">
-            <div class="file-upload-section">
-                <h3>📁 Upload Required Data Files</h3>
-                <div class="file-input-group">
-                    <label>Postal Code Database (allCountries.txt):</label>
-                    <input type="file" id="postalFile" accept=".txt" />
-                </div>
-                <div class="file-input-group">
-                    <label>Bank Ratings Database (CSV):</label>
-                    <input type="file" id="bankRatingsFile" accept=".csv" />
-                </div>
-            </div>
-
             <div class="search-form">
                 <div class="form-group">
                     <label for="country">Country Code:</label>
-                    <select id="country">
-                        <option value="">Select a country...</option>
+                    <select id="country" disabled>
+                        <option value="">Loading countries...</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="postalCode">Postal/ZIP Code:</label>
-                    <input type="text" id="postalCode" placeholder="Enter your postal code" />
+                    <input type="text" id="postalCode" placeholder="Enter your postal code" disabled />
                 </div>
                 <div class="form-group">
                     <label for="radius">Search Radius:</label>
-                    <select id="radius">
+                    <select id="radius" disabled>
                         <option value="25">25 km</option>
                         <option value="50">50 km</option>
                         <option value="100">100 km</option>
                     </select>
                 </div>
-                <button class="btn" onclick="searchBanks()" id="searchBtn">Search Banks</button>
+                <button class="btn" onclick="searchBanks()" id="searchBtn" disabled>Search Banks</button>
             </div>
         </div>
 
@@ -377,74 +385,49 @@
         let markersLayer = null;
         let countryCodes = new Set();
 
-        document.getElementById('postalFile').addEventListener('change', loadPostalData);
-        document.getElementById('bankRatingsFile').addEventListener('change', loadBankRatings);
-
         function showStatus(message, type = 'info') {
             const statusDiv = document.getElementById('statusMessage');
             statusDiv.innerHTML = `<div class="status-${type}">${message}</div>`;
             setTimeout(() => statusDiv.innerHTML = '', 5000);
         }
 
-        function loadPostalData(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const lines = event.target.result.split('\n');
-                postalData = [];
-                countryCodes.clear();
-                
-                lines.forEach(line => {
-                    const parts = line.split('\t');
-                    // Format: country, postal_code, place_name, admin1, admin2, admin3, admin4, place_name2, admin_code, lat, lon, accuracy
-                    if (parts.length >= 10) {
-                        const lat = parseFloat(parts[9]);
-                        const lon = parseFloat(parts[10]);
-                        
-                        if (!isNaN(lat) && !isNaN(lon)) {
-                            const entry = {
-                                country: parts[0].trim(),
-                                postalCode: parts[1].trim(),
-                                placeName: parts[2].trim(),
-                                lat: lat,
-                                lon: lon
-                            };
-                            postalData.push(entry);
-                            countryCodes.add(entry.country);
-                        }
+        function processPostalData(text) {
+            const lines = text.split('\n');
+            postalData = [];
+            countryCodes.clear();
+            
+            lines.forEach(line => {
+                const parts = line.split('\t');
+                if (parts.length >= 10) {
+                    const lat = parseFloat(parts[9]);
+                    const lon = parseFloat(parts[10]);
+                    
+                    if (!isNaN(lat) && !isNaN(lon)) {
+                        const entry = {
+                            country: parts[0].trim(),
+                            postalCode: parts[1].trim(),
+                            placeName: parts[2].trim(),
+                            lat: lat,
+                            lon: lon
+                        };
+                        postalData.push(entry);
+                        countryCodes.add(entry.country);
                     }
-                });
-                
-                // Populate country dropdown
-                const countrySelect = document.getElementById('country');
-                countrySelect.innerHTML = '<option value="">Select a country...</option>';
-                
-                const sortedCountries = Array.from(countryCodes).sort();
-                sortedCountries.forEach(code => {
-                    const option = document.createElement('option');
-                    option.value = code;
-                    option.textContent = code;
-                    countrySelect.appendChild(option);
-                });
-                
-                showStatus(`✓ Loaded ${postalData.length} postal codes from ${countryCodes.size} countries`, 'success');
-            };
-            reader.readAsText(file);
-        }
-
-        function loadBankRatings(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            Papa.parse(file, {
-                header: true,
-                complete: function(results) {
-                    bankRatings = results.data.filter(row => row.name);
-                    showStatus(`✓ Loaded ${bankRatings.length} bank ratings`, 'success');
                 }
             });
+            
+            const countrySelect = document.getElementById('country');
+            countrySelect.innerHTML = '<option value="">Select a country...</option>';
+            
+            const sortedCountries = Array.from(countryCodes).sort();
+            sortedCountries.forEach(code => {
+                const option = document.createElement('option');
+                option.value = code;
+                option.textContent = code;
+                countrySelect.appendChild(option);
+            });
+            
+            countrySelect.disabled = false;
         }
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -513,11 +496,10 @@
         function createCustomIcon(color, rating) {
             let size = 30;
             
-            // Adjust size based on rating
             if (rating === null || isNaN(rating)) {
-                size = 12; // Much smaller for unrated
+                size = 12;
             } else if (rating <= 40) {
-                size = 22; // Slightly smaller for bad and worst
+                size = 22;
             }
             
             const halfSize = size / 2;
@@ -541,7 +523,6 @@
 
             let recommended = [...greatAndGood];
             
-            // If 2 or fewer great/good banks, include okay banks
             if (greatAndGood.length <= 2) {
                 const okayBanks = banks
                     .filter(b => b.rating !== null && b.rating >= 41 && b.rating <= 60)
@@ -604,16 +585,15 @@
             }
 
             if (postalData.length === 0) {
-                showStatus('Please upload the postal code database file', 'error');
+                showStatus('Data still loading, please wait', 'error');
                 return;
             }
 
             if (bankRatings.length === 0) {
-                showStatus('Please upload the bank ratings CSV file', 'error');
+                showStatus('Data still loading, please wait', 'error');
                 return;
             }
 
-            // Find location matching both country and postal code
             const location = postalData.find(p => 
                 p.country === countryCode && 
                 normalizeText(p.postalCode) === normalizeText(postalCode)
@@ -721,68 +701,42 @@
                 console.error(error);
             }
         }
-    // Add this at the end of your script section, before closing script
-    window.addEventListener('DOMContentLoaded', async function() {
-        showStatus('Loading data files...', 'info');
-        
-        try {
-            // Load postal code data
-            const postalResponse = await fetch('assets/allCountries.txt');
-            const postalText = await postalResponse.text();
-            processPostalData(postalText);
-            
-            // Load bank ratings
-            const csvResponse = await fetch('assets/bank_green_list_complete_rated.csv');
-            const csvText = await csvResponse.text();
-            Papa.parse(csvText, {
-                header: true,
-                complete: function(results) {
-                    bankRatings = results.data.filter(row => row.name);
-                    showStatus(`✓ Ready! Loaded ${postalData.length} postal codes and ${bankRatings.length} bank ratings`, 'success');
-                }
-            });
-        } catch (error) {
-            showStatus('Error loading data files: ' + error.message, 'error');
-        }
-    });
 
-    function processPostalData(text) {
-        const lines = text.split('\n');
-        postalData = [];
-        countryCodes.clear();
-        
-        lines.forEach(line => {
-            const parts = line.split('\t');
-            if (parts.length >= 10) {
-                const lat = parseFloat(parts[9]);
-                const lon = parseFloat(parts[10]);
+        // Auto-load data files on page load
+        window.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Load bank ratings first (smaller file)
+                const csvResponse = await fetch('assets/bank_green_list_complete_rated.csv');
+                const csvText = await csvResponse.text();
+                Papa.parse(csvText, {
+                    header: true,
+                    complete: function(results) {
+                        bankRatings = results.data.filter(row => row.name);
+                        console.log(`Loaded ${bankRatings.length} bank ratings`);
+                    }
+                });
                 
-                if (!isNaN(lat) && !isNaN(lon)) {
-                    const entry = {
-                        country: parts[0].trim(),
-                        postalCode: parts[1].trim(),
-                        placeName: parts[2].trim(),
-                        lat: lat,
-                        lon: lon
-                    };
-                    postalData.push(entry);
-                    countryCodes.add(entry.country);
-                }
+                // Load postal code data
+                const postalResponse = await fetch('assets/allCountries.txt');
+                const postalText = await postalResponse.text();
+                processPostalData(postalText);
+                
+                // Hide loading overlay
+                document.getElementById('loadingOverlay').style.display = 'none';
+                
+                // Enable form elements
+                document.getElementById('postalCode').disabled = false;
+                document.getElementById('radius').disabled = false;
+                document.getElementById('searchBtn').disabled = false;
+                
+                showStatus(`✓ Ready! Loaded ${postalData.length} postal codes and ${bankRatings.length} bank ratings`, 'success');
+                
+            } catch (error) {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                showStatus('Error loading data files: ' + error.message, 'error');
+                console.error('Loading error:', error);
             }
         });
-        
-        // Populate country dropdown
-        const countrySelect = document.getElementById('country');
-        countrySelect.innerHTML = '<option value="">Select a country...</option>';
-        
-        const sortedCountries = Array.from(countryCodes).sort();
-        sortedCountries.forEach(code => {
-            const option = document.createElement('option');
-            option.value = code;
-            option.textContent = code;
-            countrySelect.appendChild(option);
-        });
-    }
     </script>
 </body>
 </html>
