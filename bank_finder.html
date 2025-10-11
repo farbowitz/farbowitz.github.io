@@ -671,53 +671,76 @@
                 if (!map) {
                     map = L.map('map', {
                         preferCanvas: true,
-                        zoomControl: true
-                    }).setView([location.lat, location.lon], zoomLevel);
+                        zoomControl: true,
+                        center: [location.lat, location.lon],
+                        zoom: zoomLevel
+                    });
                     
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '© OpenStreetMap contributors',
                         maxZoom: 19,
                         minZoom: 8,
-                        keepBuffer: 8,
+                        keepBuffer: 12,
                         updateWhenZooming: false,
                         updateWhenIdle: true,
                         tileSize: 256
                     }).addTo(map);
+                    
+                    map.setView([location.lat, location.lon], zoomLevel);
                 } else {
                     map.setView([location.lat, location.lon], zoomLevel);
                 }
 
-                // Preload tiles for the search radius area at multiple zoom levels
+                // Aggressive tile preloading - load from center outward
                 setTimeout(() => {
-                    const radiusInDegrees = radius / 111; // Rough conversion: 1 degree ≈ 111 km
-                    const bounds = L.latLngBounds(
-                        [location.lat - radiusInDegrees, location.lon - radiusInDegrees],
-                        [location.lat + radiusInDegrees, location.lon + radiusInDegrees]
-                    );
+                    const centerLat = location.lat;
+                    const centerLon = location.lon;
+                    const radiusInDegrees = Math.min(radius, 100) / 111;
                     
-                    // Preload tiles for zoom levels covering from street view to region view
+                    // Preload tiles for a wide range of zoom levels
                     const preloadZooms = [];
-                    for (let z = Math.max(8, zoomLevel - 2); z <= Math.min(16, zoomLevel + 3); z++) {
+                    for (let z = Math.max(8, zoomLevel - 3); z <= Math.min(17, zoomLevel + 4); z++) {
                         preloadZooms.push(z);
                     }
                     
                     preloadZooms.forEach(zoom => {
-                        const ne = bounds.getNorthEast();
-                        const sw = bounds.getSouthWest();
+                        // Calculate tile bounds for the radius
+                        const latMin = centerLat - radiusInDegrees * 1.5;
+                        const latMax = centerLat + radiusInDegrees * 1.5;
+                        const lonMin = centerLon - radiusInDegrees * 1.5;
+                        const lonMax = centerLon + radiusInDegrees * 1.5;
                         
-                        const xMin = Math.floor((sw.lng + 180) / 360 * Math.pow(2, zoom));
-                        const xMax = Math.floor((ne.lng + 180) / 360 * Math.pow(2, zoom));
-                        const yMin = Math.floor((1 - Math.log(Math.tan(ne.lat * Math.PI / 180) + 1 / Math.cos(ne.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
-                        const yMax = Math.floor((1 - Math.log(Math.tan(sw.lat * Math.PI / 180) + 1 / Math.cos(sw.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
+                        const xMin = Math.floor((lonMin + 180) / 360 * Math.pow(2, zoom));
+                        const xMax = Math.floor((lonMax + 180) / 360 * Math.pow(2, zoom));
+                        const yMin = Math.floor((1 - Math.log(Math.tan(latMax * Math.PI / 180) + 1 / Math.cos(latMax * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
+                        const yMax = Math.floor((1 - Math.log(Math.tan(latMin * Math.PI / 180) + 1 / Math.cos(latMin * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
                         
+                        // Calculate center tile
+                        const xCenter = Math.floor((centerLon + 180) / 360 * Math.pow(2, zoom));
+                        const yCenter = Math.floor((1 - Math.log(Math.tan(centerLat * Math.PI / 180) + 1 / Math.cos(centerLat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
+                        
+                        // Create array of tiles sorted by distance from center
+                        const tiles = [];
                         for (let x = xMin; x <= xMax; x++) {
                             for (let y = yMin; y <= yMax; y++) {
-                                const img = new Image();
-                                img.src = `https://a.tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
+                                const dist = Math.sqrt(Math.pow(x - xCenter, 2) + Math.pow(y - yCenter, 2));
+                                tiles.push({ x, y, dist, zoom });
                             }
                         }
+                        
+                        // Sort by distance from center
+                        tiles.sort((a, b) => a.dist - b.dist);
+                        
+                        // Load tiles from center outward
+                        tiles.forEach((tile, index) => {
+                            setTimeout(() => {
+                                const img = new Image();
+                                const server = ['a', 'b', 'c'][index % 3];
+                                img.src = `https://${server}.tile.openstreetmap.org/${tile.zoom}/${tile.x}/${tile.y}.png`;
+                            }, index * 5);
+                        });
                     });
-                }, 100);
+                }, 200);
 
                 if (markersLayer) {
                     markersLayer.clearLayers();
@@ -725,6 +748,7 @@
                     markersLayer = L.layerGroup().addTo(map);
                 }
 
+                // Add user location marker FIRST so it's visible immediately
                 L.marker([location.lat, location.lon], {
                     icon: L.divIcon({
                         className: 'search-location',
@@ -732,7 +756,7 @@
                         iconSize: [20, 20],
                         iconAnchor: [10, 10]
                     })
-                }).addTo(markersLayer).bindPopup('<strong>Your Location</strong>');
+                }).addTo(markersLayer).bindPopup('<strong>Your Location</strong>').openPopup();
 
                 const banks = data.elements.map(element => {
                     const lat = element.lat || (element.center && element.center.lat);
@@ -809,7 +833,7 @@
                             }
                         });
                         
-                        // Country name mapping
+                        // Country name mapping (full names for display)
                         const countryNames = {
                             'US': 'United States',
                             'CA': 'Canada',
@@ -840,18 +864,57 @@
                             'CN': 'China',
                             'KR': 'South Korea',
                             'SG': 'Singapore',
-                            'ZA': 'South Africa'
+                            'ZA': 'South Africa',
+                            'RU': 'Russia',
+                            'UA': 'Ukraine',
+                            'TR': 'Turkey',
+                            'SA': 'Saudi Arabia',
+                            'AE': 'United Arab Emirates',
+                            'EG': 'Egypt',
+                            'NG': 'Nigeria',
+                            'KE': 'Kenya',
+                            'GH': 'Ghana',
+                            'TH': 'Thailand',
+                            'VN': 'Vietnam',
+                            'MY': 'Malaysia',
+                            'ID': 'Indonesia',
+                            'PH': 'Philippines',
+                            'PK': 'Pakistan',
+                            'BD': 'Bangladesh',
+                            'CL': 'Chile',
+                            'CO': 'Colombia',
+                            'PE': 'Peru',
+                            'VE': 'Venezuela',
+                            'GR': 'Greece',
+                            'RO': 'Romania',
+                            'HU': 'Hungary',
+                            'SK': 'Slovakia',
+                            'BG': 'Bulgaria',
+                            'HR': 'Croatia',
+                            'SI': 'Slovenia',
+                            'LT': 'Lithuania',
+                            'LV': 'Latvia',
+                            'EE': 'Estonia',
+                            'IS': 'Iceland',
+                            'LU': 'Luxembourg',
+                            'MT': 'Malta',
+                            'CY': 'Cyprus'
                         };
                         
-                        // Populate country dropdown with only countries in CSV
+                        // Create array of countries with their names
+                        const countryList = Array.from(countriesInCSV).map(code => ({
+                            code: code,
+                            name: countryNames[code] || code
+                        })).sort((a, b) => a.name.localeCompare(b.name));
+                        
+                        // Populate country dropdown alphabetically by country name
                         const countrySelect = document.getElementById('country');
                         countrySelect.innerHTML = '<option value="">Select a country...</option>';
                         
-                        const sortedCountries = Array.from(countriesInCSV).sort();
-                        sortedCountries.forEach(code => {
+                        countryList.forEach(country => {
                             const option = document.createElement('option');
-                            option.value = code;
-                            option.textContent = countryNames[code] ? `${countryNames[code]} (${code})` : code;
+                            option.value = country.code;
+                            option.textContent = country.name;
                             countrySelect.appendChild(option);
                         });
                         
