@@ -202,6 +202,12 @@
             margin-bottom: 0.5rem;
         }
 
+        .bank-locations {
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
         .bank-summary {
             color: #4b5563;
             font-size: 0.9rem;
@@ -325,36 +331,7 @@
                 <div class="form-group">
                     <label for="country">Country Code:</label>
                     <select id="country">
-                        <option value="US">United States (US)</option>
-                        <option value="CA">Canada (CA)</option>
-                        <option value="GB">United Kingdom (GB)</option>
-                        <option value="DE">Germany (DE)</option>
-                        <option value="FR">France (FR)</option>
-                        <option value="ES">Spain (ES)</option>
-                        <option value="IT">Italy (IT)</option>
-                        <option value="AU">Australia (AU)</option>
-                        <option value="NZ">New Zealand (NZ)</option>
-                        <option value="JP">Japan (JP)</option>
-                        <option value="NL">Netherlands (NL)</option>
-                        <option value="BE">Belgium (BE)</option>
-                        <option value="CH">Switzerland (CH)</option>
-                        <option value="AT">Austria (AT)</option>
-                        <option value="SE">Sweden (SE)</option>
-                        <option value="NO">Norway (NO)</option>
-                        <option value="DK">Denmark (DK)</option>
-                        <option value="FI">Finland (FI)</option>
-                        <option value="IE">Ireland (IE)</option>
-                        <option value="PT">Portugal (PT)</option>
-                        <option value="PL">Poland (PL)</option>
-                        <option value="CZ">Czech Republic (CZ)</option>
-                        <option value="MX">Mexico (MX)</option>
-                        <option value="BR">Brazil (BR)</option>
-                        <option value="AR">Argentina (AR)</option>
-                        <option value="IN">India (IN)</option>
-                        <option value="CN">China (CN)</option>
-                        <option value="KR">South Korea (KR)</option>
-                        <option value="SG">Singapore (SG)</option>
-                        <option value="ZA">South Africa (ZA)</option>
+                        <option value="">Loading countries...</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -454,28 +431,50 @@
                 .trim();
         }
 
-        function matchBankName(bankName) {
+        function matchBankName(bankName, countryCode) {
             const normalized = normalizeText(bankName);
-            const commonTerms = ['bank', 'banco', 'credit union', 'federal credit union', 'fcu', 'cu', 'national', 'trust', 'savings'];
+            
+            // Stricter matching - require at least 3 characters after normalization
+            if (normalized.length < 3) return null;
+            
+            const commonTerms = ['bank', 'banco', 'credit union', 'federal credit union', 'fcu', 'cu', 'national', 'trust', 'savings', 'financial'];
             
             for (const rating of bankRatings) {
+                // Check if bank has country data and if it matches
+                if (rating.countries) {
+                    const bankCountries = rating.countries.toUpperCase().split(',').map(c => c.trim());
+                    if (!bankCountries.includes(countryCode.toUpperCase())) {
+                        continue; // Skip if country doesn't match
+                    }
+                }
+                
                 const ratingName = normalizeText(rating.name);
                 
+                // Exact match
                 if (ratingName === normalized) return rating;
                 
+                // Remove common banking terms for comparison
                 let searchName = normalized;
                 let ratingSearchName = ratingName;
                 
                 for (const term of commonTerms) {
-                    searchName = searchName.replace(term, '').replace(/\s+/g, ' ').trim();
-                    ratingSearchName = ratingSearchName.replace(term, '').replace(/\s+/g, ' ').trim();
+                    searchName = searchName.replace(new RegExp('\\b' + term + '\\b', 'g'), '').replace(/\s+/g, ' ').trim();
+                    ratingSearchName = ratingSearchName.replace(new RegExp('\\b' + term + '\\b', 'g'), '').replace(/\s+/g, ' ').trim();
                 }
                 
-                if (searchName && ratingSearchName && 
-                    (searchName === ratingSearchName || 
-                     searchName.includes(ratingSearchName) || 
-                     ratingSearchName.includes(searchName))) {
+                // Require at least 4 characters to match after term removal
+                if (searchName.length < 4 || ratingSearchName.length < 4) continue;
+                
+                // Only match if the core name is very similar (at least 80% of the shorter name matches)
+                if (searchName === ratingSearchName) {
                     return rating;
+                } else if (searchName.length > 0 && ratingSearchName.length > 0) {
+                    const minLength = Math.min(searchName.length, ratingSearchName.length);
+                    if (searchName.includes(ratingSearchName) && ratingSearchName.length >= minLength * 0.8) {
+                        return rating;
+                    } else if (ratingSearchName.includes(searchName) && searchName.length >= minLength * 0.8) {
+                        return rating;
+                    }
                 }
             }
             return null;
@@ -524,8 +523,7 @@
                 .map(b => ({
                     ...b,
                     distance: calculateDistance(userLat, userLon, b.lat, b.lon)
-                }))
-                .sort((a, b) => a.distance - b.distance);
+                }));
 
             let recommended = [...greatAndGood];
             
@@ -535,22 +533,43 @@
                     .map(b => ({
                         ...b,
                         distance: calculateDistance(userLat, userLon, b.lat, b.lon)
-                    }))
-                    .sort((a, b) => a.distance - b.distance);
+                    }));
                 
-                recommended = [...greatAndGood, ...okayBanks].sort((a, b) => a.distance - b.distance);
+                recommended = [...greatAndGood, ...okayBanks];
             }
+
+            // Group by bank name and aggregate locations
+            const bankGroups = {};
+            recommended.forEach(bank => {
+                const key = bank.name.toLowerCase();
+                if (!bankGroups[key]) {
+                    bankGroups[key] = {
+                        name: bank.name,
+                        rating: bank.rating,
+                        ratingData: bank.ratingData,
+                        distances: []
+                    };
+                }
+                bankGroups[key].distances.push(bank.distance);
+            });
+
+            // Sort distances within each group and sort groups by closest location
+            const groupedBanks = Object.values(bankGroups).map(group => {
+                group.distances.sort((a, b) => a - b);
+                group.closestDistance = group.distances[0];
+                return group;
+            }).sort((a, b) => a.closestDistance - b.closestDistance);
 
             const bankListDiv = document.getElementById('bankList');
             const recommendedDiv = document.getElementById('recommendedBanks');
 
-            if (recommended.length === 0) {
+            if (groupedBanks.length === 0) {
                 bankListDiv.innerHTML = '<div class="no-results">No Great or Good rated banks found in this area.</div>';
                 recommendedDiv.style.display = 'block';
                 return;
             }
 
-            bankListDiv.innerHTML = recommended.map(bank => {
+            bankListDiv.innerHTML = groupedBanks.map(bank => {
                 let ratingClass = 'good';
                 let ratingBadgeClass = 'rating-good';
                 
@@ -561,12 +580,16 @@
                     ratingClass = 'okay';
                     ratingBadgeClass = 'rating-okay';
                 }
+
+                const locationText = bank.distances.length > 1 
+                    ? `📍 ${bank.distances.length} locations: ${bank.distances.map(d => d.toFixed(1) + ' km').join(', ')}`
+                    : `📍 ${bank.distances[0].toFixed(1)} km away`;
                 
                 return `
                     <div class="bank-item ${ratingClass}">
                         <div class="bank-name">${bank.name}</div>
                         <span class="bank-rating ${ratingBadgeClass}">${getRatingLabel(bank.rating)} (${bank.rating.toFixed(0)})</span>
-                        <div class="bank-distance">📍 ${bank.distance.toFixed(1)} km away</div>
+                        <div class="bank-locations">${locationText}</div>
                         ${bank.ratingData?.summary ? `<div class="bank-summary">${bank.ratingData.summary}</div>` : ''}
                     </div>
                 `;
@@ -662,9 +685,16 @@
                 hideLoading();
 
                 if (!map) {
-                    map = L.map('map').setView([location.lat, location.lon], 11);
+                    map = L.map('map', {
+                        preferCanvas: true,
+                        zoomControl: true
+                    }).setView([location.lat, location.lon], 11);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap contributors'
+                        attribution: '© OpenStreetMap contributors',
+                        maxZoom: 19,
+                        keepBuffer: 4,
+                        updateWhenZooming: false,
+                        updateWhenIdle: true
                     }).addTo(map);
                 } else {
                     map.setView([location.lat, location.lon], 11);
@@ -689,7 +719,7 @@
                     const lat = element.lat || (element.center && element.center.lat);
                     const lon = element.lon || (element.center && element.center.lon);
                     const name = element.tags?.name || 'Unknown Bank';
-                    const rating = matchBankName(name);
+                    const rating = matchBankName(name, countryCode);
                     
                     return {
                         name,
@@ -750,8 +780,64 @@
                     header: true,
                     complete: function(results) {
                         bankRatings = results.data.filter(row => row.name);
-                        console.log(`Loaded ${bankRatings.length} bank ratings`);
-                        showStatus(`✓ Ready! Loaded ${bankRatings.length} bank ratings`, 'success');
+                        
+                        // Extract unique countries from the CSV
+                        const countriesInCSV = new Set();
+                        bankRatings.forEach(bank => {
+                            if (bank.countries) {
+                                const countries = bank.countries.toUpperCase().split(',').map(c => c.trim());
+                                countries.forEach(c => countriesInCSV.add(c));
+                            }
+                        });
+                        
+                        // Country name mapping
+                        const countryNames = {
+                            'US': 'United States',
+                            'CA': 'Canada',
+                            'GB': 'United Kingdom',
+                            'DE': 'Germany',
+                            'FR': 'France',
+                            'ES': 'Spain',
+                            'IT': 'Italy',
+                            'AU': 'Australia',
+                            'NZ': 'New Zealand',
+                            'JP': 'Japan',
+                            'NL': 'Netherlands',
+                            'BE': 'Belgium',
+                            'CH': 'Switzerland',
+                            'AT': 'Austria',
+                            'SE': 'Sweden',
+                            'NO': 'Norway',
+                            'DK': 'Denmark',
+                            'FI': 'Finland',
+                            'IE': 'Ireland',
+                            'PT': 'Portugal',
+                            'PL': 'Poland',
+                            'CZ': 'Czech Republic',
+                            'MX': 'Mexico',
+                            'BR': 'Brazil',
+                            'AR': 'Argentina',
+                            'IN': 'India',
+                            'CN': 'China',
+                            'KR': 'South Korea',
+                            'SG': 'Singapore',
+                            'ZA': 'South Africa'
+                        };
+                        
+                        // Populate country dropdown with only countries in CSV
+                        const countrySelect = document.getElementById('country');
+                        countrySelect.innerHTML = '<option value="">Select a country...</option>';
+                        
+                        const sortedCountries = Array.from(countriesInCSV).sort();
+                        sortedCountries.forEach(code => {
+                            const option = document.createElement('option');
+                            option.value = code;
+                            option.textContent = countryNames[code] ? `${countryNames[code]} (${code})` : code;
+                            countrySelect.appendChild(option);
+                        });
+                        
+                        console.log(`Loaded ${bankRatings.length} bank ratings from ${countriesInCSV.size} countries`);
+                        showStatus(`✓ Ready! Loaded ${bankRatings.length} bank ratings from ${countriesInCSV.size} countries`, 'success');
                     }
                 });
             } catch (error) {
