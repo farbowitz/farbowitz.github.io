@@ -718,7 +718,7 @@
                 
                 // Load postal code data from Git LFS
                 // Use the raw GitHub URL for LFS files
-                const postalResponse = await fetch('https://media.githubusercontent.com/media/farbowitz/farbowitz.github.io/assets/allCountries.txt');
+                const postalResponse = await fetch('https://media.githubusercontent.com/media/farbowitz/farbowitz.github.io/main/assets/allCountries.txt');
                 
                 if (!postalResponse.ok) {
                     throw new Error(`Failed to load postal data: ${postalResponse.status}`);
