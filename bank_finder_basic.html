@@ -716,8 +716,14 @@
                     }
                 });
                 
-                // Load postal code data
-                const postalResponse = await fetch('assets/allCountries.txt');
+                // Load postal code data from Git LFS
+                // Use the raw GitHub URL for LFS files
+                const postalResponse = await fetch('https://media.githubusercontent.com/media/farbowitz/farbowitz.github.io/main/assets/allCountries.txt');
+                
+                if (!postalResponse.ok) {
+                    throw new Error(`Failed to load postal data: ${postalResponse.status}`);
+                }
+                
                 const postalText = await postalResponse.text();
                 processPostalData(postalText);
                 
