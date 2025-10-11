@@ -661,11 +661,18 @@
 
                 hideLoading();
 
+                // Calculate appropriate zoom level based on radius
+                let zoomLevel;
+                if (radius <= 10) zoomLevel = 13;
+                else if (radius <= 25) zoomLevel = 12;
+                else if (radius <= 50) zoomLevel = 11;
+                else zoomLevel = 10;
+
                 if (!map) {
                     map = L.map('map', {
                         preferCanvas: true,
                         zoomControl: true
-                    }).setView([location.lat, location.lon], 13);
+                    }).setView([location.lat, location.lon], zoomLevel);
                     
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '© OpenStreetMap contributors',
@@ -676,28 +683,41 @@
                         updateWhenIdle: true,
                         tileSize: 256
                     }).addTo(map);
+                } else {
+                    map.setView([location.lat, location.lon], zoomLevel);
+                }
+
+                // Preload tiles for the search radius area at multiple zoom levels
+                setTimeout(() => {
+                    const radiusInDegrees = radius / 111; // Rough conversion: 1 degree ≈ 111 km
+                    const bounds = L.latLngBounds(
+                        [location.lat - radiusInDegrees, location.lon - radiusInDegrees],
+                        [location.lat + radiusInDegrees, location.lon + radiusInDegrees]
+                    );
                     
-                    // Preload tiles at multiple zoom levels
-                    const preloadZooms = [10, 11, 12, 13, 14, 15];
+                    // Preload tiles for zoom levels covering from street view to region view
+                    const preloadZooms = [];
+                    for (let z = Math.max(8, zoomLevel - 2); z <= Math.min(16, zoomLevel + 3); z++) {
+                        preloadZooms.push(z);
+                    }
+                    
                     preloadZooms.forEach(zoom => {
-                        const bounds = map.getBounds();
                         const ne = bounds.getNorthEast();
                         const sw = bounds.getSouthWest();
                         
-                        // Calculate tile coordinates for this zoom level
-                        for (let x = Math.floor((sw.lng + 180) / 360 * Math.pow(2, zoom)); 
-                             x <= Math.floor((ne.lng + 180) / 360 * Math.pow(2, zoom)); x++) {
-                            for (let y = Math.floor((1 - Math.log(Math.tan(ne.lat * Math.PI / 180) + 1 / Math.cos(ne.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom)); 
-                                 y <= Math.floor((1 - Math.log(Math.tan(sw.lat * Math.PI / 180) + 1 / Math.cos(sw.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom)); y++) {
-                                // Preload tile
+                        const xMin = Math.floor((sw.lng + 180) / 360 * Math.pow(2, zoom));
+                        const xMax = Math.floor((ne.lng + 180) / 360 * Math.pow(2, zoom));
+                        const yMin = Math.floor((1 - Math.log(Math.tan(ne.lat * Math.PI / 180) + 1 / Math.cos(ne.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
+                        const yMax = Math.floor((1 - Math.log(Math.tan(sw.lat * Math.PI / 180) + 1 / Math.cos(sw.lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, zoom));
+                        
+                        for (let x = xMin; x <= xMax; x++) {
+                            for (let y = yMin; y <= yMax; y++) {
                                 const img = new Image();
                                 img.src = `https://a.tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
                             }
                         }
                     });
-                } else {
-                    map.setView([location.lat, location.lon], 13);
-                }
+                }, 100);
 
                 if (markersLayer) {
                     markersLayer.clearLayers();
