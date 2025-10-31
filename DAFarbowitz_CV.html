@@ -1,787 +1,1219 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
+
     <meta charset="utf-8">
+
     <title>D. Alec Farbowitz - Resume</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
     <style>
+
         * {
+
             margin: 0;
+
             padding: 0;
+
             box-sizing: border-box;
+
         }
+
+
 
         body {
+
             font-family: 'Source Sans Pro', Helvetica, sans-serif;
-            font-size: 19pt;
+
+            font-size: 15pt;
+
             font-weight: 300;
+
             line-height: 1.65em;
-            color: #888;
-            background: #fff;
+
+            color: #444;
+
+            background: #f4f4f4;
+
         }
+
+
 
         h1, h2, h3, h4, h5, h6 {
-            color: #666;
+
+            color: #787878;
+
             font-weight: 300;
+
             line-height: 1.5em;
+
         }
+
+
+
+        h1 { font-size: 2.25em; margin-bottom: 0.4em; }
 
         h2 { 
+
             font-size: 1.5em; 
-            margin: 2.5em 0 1em;
-        }
-        
-        h3 { 
-            font-size: 1.35em; 
-            margin: 0.5em 0 0.3em; 
-            color: #666;
+
+            margin: 2em 0 1em; 
+
+            color: #787878;
+
+            font-weight: 400;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.1em;
+
+            font-size: 0.9em;
+
         }
 
-        strong { 
-            color: #666; 
-            font-weight: 400;
-        }
+        h3 { font-size: 1.25em; margin: 0.5em 0 0.3em; color: #787878; font-weight: 400; }
+
+        h4 { font-size: 1em; margin: 0.3em 0; color: #999; font-weight: 300; }
+
+
+
+        strong { color: #787878; font-weight: 400; }
+
+
 
         a {
+
             color: #49bf9d;
+
             text-decoration: none;
-            border-bottom: 1px dotted rgba(160,160,160,0.65);
+
+            border-bottom: 1px dotted #49bf9d;
+
             transition: border-bottom-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
         }
+
+
 
         a:hover { 
+
             border-bottom-color: transparent;
+
             color: #49bf9d;
+
         }
 
-        /* Header - exact match to original */
+
+
+        /* Header Sidebar */
+
         #header {
+
             position: fixed;
+
             top: 0;
+
             left: 0;
+
             width: 35%;
+
             height: 100%;
+
             background: #1f1815 url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjgiIGhlaWdodD0iOCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA4IDAgTCAwIDAgMCA4IiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==');
+
             padding: 6em 3em 3em 3em;
+
             text-align: center;
+
             overflow-y: auto;
+
         }
 
-        #header .inner {
-            /* Container for header content */
-        }
+
 
         .image.avatar {
+
             display: block;
+
             margin: 0 auto 2em;
+
             width: 140px;
+
             height: 140px;
+
             border-radius: 100%;
+
             overflow: hidden;
+
+            box-shadow: 0 0 0 0.5em rgba(255,255,255,0.05);
+
         }
+
+
 
         .image.avatar img {
+
             width: 100%;
+
             height: 100%;
-            display: block;
-            border-radius: 100%;
+
+            object-fit: cover;
+
         }
+
+
 
         #header h1 {
-            color: rgba(255,255,255,0.5);
-            font-size: 1.35em;
+
+            color: rgba(255,255,255,0.9);
+
+            font-size: 1.75em;
+
             font-weight: 300;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 0;
+
+            margin-bottom: 0.5em;
+
         }
 
-        #header h1 strong {
-            color: #fff;
-            font-weight: 300;
-        }
+
 
         #header p {
+
             color: rgba(255,255,255,0.5);
+
             font-size: 0.8em;
+
             line-height: 1.5em;
-            margin: 1.5em 0 0 0;
+
+            margin-bottom: 1.5em;
+
         }
 
-        /* Skills Section */
-        .skills-section {
-            margin: 3em 0 2em 0;
+
+
+        /* Skills Grid */
+
+        .skills-grid {
+
+            margin-top: 3em;
+
             text-align: left;
+
         }
 
-        .skills-section h4 {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.7em;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-bottom: 1em;
-            font-weight: 400;
-            text-align: center;
-        }
+
 
         .skill-category {
-            margin-bottom: 0.5em;
+
+            margin-bottom: 2em;
+
         }
 
-        .skill-header {
-            background: rgba(255,255,255,0.08);
-            padding: 0.6em 1em;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
 
-        .skill-header:hover {
-            background: rgba(73,191,157,0.15);
-            border-color: rgba(73,191,157,0.3);
-        }
 
-        .skill-header.active {
-            background: rgba(73,191,157,0.2);
-            border-color: rgba(73,191,157,0.4);
-        }
+        .skill-category h4 {
 
-        .skill-name {
-            color: rgba(255,255,255,0.75);
-            font-size: 0.65em;
-            font-weight: 400;
+            color: rgba(255,255,255,0.7);
+
+            font-size: 0.7em;
+
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+
+            letter-spacing: 0.2em;
+
+            margin-bottom: 0.8em;
+
+            font-weight: 400;
+
         }
 
-        .skill-header.active .skill-name {
-            color: #49bf9d;
-        }
 
-        .skill-arrow {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.6em;
-            transition: transform 0.3s ease;
-        }
-
-        .skill-header.active .skill-arrow {
-            transform: rotate(180deg);
-            color: #49bf9d;
-        }
-
-        .skill-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            background: rgba(0,0,0,0.15);
-            border-radius: 0 0 3px 3px;
-        }
-
-        .skill-details.expanded {
-            max-height: 500px;
-            padding: 0.8em 1em;
-        }
 
         .skill-tags {
+
             display: flex;
+
             flex-wrap: wrap;
-            gap: 0.4em;
+
+            gap: 0.5em;
+
         }
+
+
 
         .skill-tag {
-            background: rgba(255,255,255,0.1);
+
+            background: rgba(255,255,255,0.08);
+
             color: rgba(255,255,255,0.6);
-            padding: 0.3em 0.6em;
-            border-radius: 2px;
-            font-size: 0.55em;
+
+            padding: 0.4em 0.8em;
+
+            border-radius: 3px;
+
+            font-size: 0.65em;
+
             font-weight: 400;
+
             transition: all 0.2s ease;
+
+            border: 1px solid rgba(255,255,255,0.1);
+
         }
+
+
 
         .skill-tag:hover {
-            background: rgba(73,191,157,0.2);
+
+            background: rgba(73,191,157,0.15);
+
             color: #49bf9d;
+
+            border-color: rgba(73,191,157,0.3);
+
+            transform: translateY(-1px);
+
         }
 
-        /* Footer in sidebar */
-        #footer {
-            margin: 2em 0 0 0;
-        }
 
-        #footer .inner {
-            /* Footer container */
-        }
+
+        /* Icons */
 
         .icons {
+
             list-style: none;
-            margin: 1em 0 0 0;
+
+            margin: 2em 0 0 0;
+
             padding: 0;
+
         }
+
+
 
         .icons li {
+
             display: inline-block;
-            padding: 0 0.75em;
+
+            padding: 0 0.5em;
+
         }
+
+
 
         .icons a {
-            color: rgba(255,255,255,0.25);
-            font-size: 2em;
+
+            color: rgba(255,255,255,0.35);
+
+            font-size: 1.25em;
+
             border: none;
-            transition: color 0.2s ease-in-out;
+
+            transition: color 0.2s ease;
+
         }
+
+
 
         .icons a:hover {
+
             color: #49bf9d;
+
         }
 
-        .copyright {
+
+
+        /* Contact in sidebar */
+
+        .contact-list {
+
             list-style: none;
-            color: rgba(255,255,255,0.25);
-            font-size: 0.6em;
+
             margin: 2em 0 0 0;
+
             padding: 0;
+
+            text-align: left;
+
         }
 
-        .copyright li {
-            display: inline-block;
-            border-left: solid 1px rgba(255,255,255,0.25);
-            padding: 0 0 0 1em;
-            margin: 0 0 0 1em;
-            line-height: 1em;
+
+
+        .contact-list li {
+
+            margin-bottom: 0.8em;
+
+            color: rgba(255,255,255,0.5);
+
+            font-size: 0.75em;
+
         }
 
-        .copyright li:first-child {
-            border-left: 0;
-            padding-left: 0;
-            margin-left: 0;
-        }
 
-        .copyright a {
-            color: inherit;
+
+        .contact-list a {
+
+            color: rgba(255,255,255,0.5);
+
+            font-size: 1em;
+
             border: none;
+
+            display: inline;
+
         }
+
+
+
+        .contact-list a:hover {
+
+            color: #49bf9d;
+
+        }
+
+
 
         /* Main Content */
+
         #main {
+
             margin-left: 35%;
-            padding: 8em 6em 6em 6em;
+
+            background: #fff;
+
+            min-height: 100vh;
+
+            padding: 6em 8em;
+
+            box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+
         }
 
-        /* Section styling */
-        section {
-            margin: 0 0 3em 0;
-        }
 
-        .major {
+
+        .section-intro {
+
+            color: #787878;
+
             margin-bottom: 2em;
+
+            font-size: 1.1em;
+
+            line-height: 1.75em;
+
         }
 
-        .major h2 {
-            font-size: 2.25em;
-            margin: 0;
+
+
+        /* Timeline Items */
+
+        .timeline-item {
+
+            margin-bottom: 2.5em;
+
+            position: relative;
+
+            padding-left: 2em;
+
+            border-left: 2px solid #efefef;
+
         }
 
-        /* Experience items */
-        .experience-item {
-            margin-bottom: 3em;
+
+
+        .timeline-item:before {
+
+            content: '';
+
+            position: absolute;
+
+            left: -6px;
+
+            top: 0.3em;
+
+            width: 10px;
+
+            height: 10px;
+
+            background: #49bf9d;
+
+            border-radius: 50%;
+
+            border: 2px solid #fff;
+
+            box-shadow: 0 0 0 2px #efefef;
+
         }
 
-        .experience-header {
+
+
+        .item-header {
+
+            margin-bottom: 0.3em;
+
+        }
+
+
+
+        .item-header h3 {
+
+            display: inline-block;
+
+            margin-right: 1em;
+
+        }
+
+
+
+        .item-meta {
+
+            color: #999;
+
+            font-size: 0.85em;
+
             margin-bottom: 0.5em;
+
         }
 
-        .experience-header h3 {
-            display: inline;
-            margin: 0;
+
+
+        .company, .institution {
+
+            color: #787878;
+
+            font-weight: 400;
+
         }
 
-        .company {
-            color: #888;
-            font-style: italic;
-            margin: 0.25em 0;
-        }
 
-        .date-location {
+
+        .date {
+
             color: #aaa;
+
             font-style: italic;
+
             font-size: 0.9em;
-            margin: 0.25em 0 0.5em 0;
+
+            display: block;
+
+            margin-top: 0.2em;
+
         }
+
+
 
         ul {
-            margin: 1em 0 0 2em;
+
+            margin: 0.8em 0 0 1.5em;
+
             padding: 0;
+
         }
+
+
 
         ul li {
-            margin-bottom: 0.75em;
-            color: #888;
+
+            margin-bottom: 0.6em;
+
+            color: #666;
+
+            line-height: 1.6em;
+
         }
+
+
 
         /* Publications */
+
         .publication {
-            background: #f9f9f9;
+
+            background: #fafafa;
+
             padding: 1.5em;
-            border-radius: 0.25em;
+
+            border-radius: 4px;
+
             margin-bottom: 1.5em;
+
+            border-left: 4px solid #49bf9d;
+
+            line-height: 1.7em;
+
         }
 
-        .pub-label {
-            color: #49bf9d;
-            font-weight: 400;
-            text-transform: uppercase;
-            font-size: 0.8em;
-            letter-spacing: 0.2em;
-            margin-bottom: 0.5em;
-            display: block;
+
+
+        .publication p {
+
+            color: #666;
+
+            margin: 0;
+
         }
+
+
+
+        .pub-type {
+
+            color: #49bf9d;
+
+            font-weight: 400;
+
+            text-transform: uppercase;
+
+            font-size: 0.75em;
+
+            letter-spacing: 0.1em;
+
+            margin-bottom: 0.5em;
+
+            display: block;
+
+        }
+
+
 
         /* Certifications */
+
         .cert-list {
-            list-style: none;
-            margin: 1em 0;
+
             display: flex;
+
             flex-wrap: wrap;
+
             gap: 1em;
+
+            list-style: none;
+
+            margin: 1em 0;
+
         }
+
+
 
         .cert-list li {
-            background: #f9f9f9;
-            padding: 0.5em 1em;
-            border-radius: 0.25em;
-            color: #888;
-            font-size: 0.9em;
+
+            background: #f8f8f8;
+
+            padding: 0.6em 1.2em;
+
+            border-radius: 20px;
+
+            color: #787878;
+
+            font-size: 0.85em;
+
+            border: 1px solid #efefef;
+
         }
+
+
 
         /* Responsive */
-        @media screen and (max-width: 1680px) {
-            body {
-                font-size: 17pt;
-            }
-        }
 
         @media screen and (max-width: 1280px) {
-            body {
-                font-size: 15pt;
-            }
-            #header {
-                width: 30%;
-            }
-            #main {
-                margin-left: 30%;
-                padding: 6em 4em 4em 4em;
-            }
+
+            #header { width: 40%; padding: 4em 2em 2em 2em; }
+
+            #main { margin-left: 40%; padding: 4em 5em; }
+
         }
+
+
 
         @media screen and (max-width: 980px) {
-            body {
-                font-size: 15pt;
-            }
+
             #header {
+
                 position: relative;
+
                 width: 100%;
+
                 height: auto;
-                padding: 4em 2em 2em 2em;
-                text-align: center;
+
+                padding: 3em 2em;
+
             }
+
             #main {
+
                 margin-left: 0;
-                padding: 4em 2em 2em 2em;
+
+                padding: 3em 2em;
+
             }
+
         }
+
+
 
         @media screen and (max-width: 736px) {
-            body {
-                font-size: 13pt;
-            }
-            #header {
-                padding: 3em 1.5em 1.5em 1.5em;
-            }
-            #main {
-                padding: 3em 1.5em 1.5em 1.5em;
-            }
+
+            body { font-size: 13pt; }
+
+            #header { padding: 2em 1.5em; }
+
+            #main { padding: 2em 1.5em; }
+
         }
+
     </style>
+
 </head>
+
 <body>
-    <!-- Header -->
+
+    <!-- Header Sidebar -->
+
     <header id="header">
+
         <div class="inner">
+
             <a href="#" class="image avatar">
-                <img src="http://farbowitz.github.io/images/Daniel_Green Background 01.jpg" alt="">
+
+                <img src="http://farbowitz.github.io/images/Daniel_Green Background 01.jpg" alt="D. Alec Farbowitz">
+
             </a>
-            <h1><strong>D. Alec Farbowitz</strong> works on<br>
-            nanofabrication, materials, and data science towards sustainability solutions.<br>
-            </h1>
 
-            <!-- Skills Section -->
-            <div class="skills-section">
-                <h4>Technical Skills</h4>
-                
-                <div class="skill-category">
-                    <div class="skill-header" onclick="toggleSkill(this)">
-                        <span class="skill-name">Python</span>
-                        <span class="skill-arrow">▼</span>
-                    </div>
-                    <div class="skill-details">
-                        <div class="skill-tags">
-                            <span class="skill-tag">Pandas</span>
-                            <span class="skill-tag">SciPy</span>
-                            <span class="skill-tag">Scikit-learn</span>
-                            <span class="skill-tag">Matplotlib</span>
-                            <span class="skill-tag">Seaborn</span>
-                            <span class="skill-tag">NLTK</span>
-                            <span class="skill-tag">BeautifulSoup</span>
-                            <span class="skill-tag">Selenium</span>
-                            <span class="skill-tag">xarray</span>
-                            <span class="skill-tag">lmfit</span>
-                        </div>
-                    </div>
-                </div>
+            <h1><strong>D. Alec Farbowitz</strong></h1>
+
+            <p>Generalist researcher in nanofabrication, renewable energy, and data analysis</p>
+
+
+
+            <ul class="contact-list">
+
+                <li>Melbourne Beach, Florida, US</li>
+
+                <li><a href="mailto:farbowitz@gmail.com">farbowitz@gmail.com</a></li>
+
+                <li><a href="https://linkedin.com/in/daniel-farbowitz" target="_blank">linkedin.com/in/daniel-farbowitz</a></li>
+
+                <li><a href="https://farbowitz.github.io" target="_blank">farbowitz.github.io</a></li>
+
+                <li><a href="https://github.com/farbowitz" target="_blank">github.com/farbowitz</a></li>
+
+            </ul>
+
+
+
+            <div class="skills-grid">
 
                 <div class="skill-category">
-                    <div class="skill-header" onclick="toggleSkill(this)">
-                        <span class="skill-name">R</span>
-                        <span class="skill-arrow">▼</span>
+
+                    <h4>Programming</h4>
+
+                    <div class="skill-tags">
+
+                        <span class="skill-tag">Python</span>
+
+                        <span class="skill-tag">R</span>
+
+                        <span class="skill-tag">SQL</span>
+
+                        <span class="skill-tag">C++</span>
+
+                        <span class="skill-tag">HTML</span>
+
                     </div>
-                    <div class="skill-details">
-                        <div class="skill-tags">
-                            <span class="skill-tag">ggplot2</span>
-                            <span class="skill-tag">dplyr</span>
-                            <span class="skill-tag">tidyverse</span>
-                            <span class="skill-tag">lubridate</span>
-                            <span class="skill-tag">modelr</span>
-                        </div>
-                    </div>
+
                 </div>
 
-                <div class="skill-category">
-                    <div class="skill-header" onclick="toggleSkill(this)">
-                        <span class="skill-name">Data Analysis</span>
-                        <span class="skill-arrow">▼</span>
-                    </div>
-                    <div class="skill-details">
-                        <div class="skill-tags">
-                            <span class="skill-tag">Regression</span>
-                            <span class="skill-tag">ANOVA</span>
-                            <span class="skill-tag">Time-Series</span>
-                            <span class="skill-tag">PCA</span>
-                            <span class="skill-tag">Machine Learning</span>
-                            <span class="skill-tag">NLP</span>
-                            <span class="skill-tag">Decision Trees</span>
-                            <span class="skill-tag">K-NN</span>
-                        </div>
-                    </div>
-                </div>
+
 
                 <div class="skill-category">
-                    <div class="skill-header" onclick="toggleSkill(this)">
-                        <span class="skill-name">Software & Tools</span>
-                        <span class="skill-arrow">▼</span>
+
+                    <h4>Data Analysis</h4>
+
+                    <div class="skill-tags">
+
+                        <span class="skill-tag">Pandas</span>
+
+                        <span class="skill-tag">Scikit-learn</span>
+
+                        <span class="skill-tag">Statistical Modeling</span>
+
+                        <span class="skill-tag">Machine Learning</span>
+
+                        <span class="skill-tag">NLP</span>
+
+                        <span class="skill-tag">Time-Series</span>
+
                     </div>
-                    <div class="skill-details">
-                        <div class="skill-tags">
-                            <span class="skill-tag">MATLAB</span>
-                            <span class="skill-tag">Git</span>
-                            <span class="skill-tag">Linux/Unix</span>
-                            <span class="skill-tag">LaTeX</span>
-                            <span class="skill-tag">Jupyter</span>
-                            <span class="skill-tag">COMSOL</span>
-                            <span class="skill-tag">SQL</span>
-                            <span class="skill-tag">C++</span>
-                            <span class="skill-tag">HTML</span>
-                        </div>
-                    </div>
+
                 </div>
 
-                <div class="skill-category">
-                    <div class="skill-header" onclick="toggleSkill(this)">
-                        <span class="skill-name">Laboratory</span>
-                        <span class="skill-arrow">▼</span>
-                    </div>
-                    <div class="skill-details">
-                        <div class="skill-tags">
-                            <span class="skill-tag">Lithography</span>
-                            <span class="skill-tag">PVD</span>
-                            <span class="skill-tag">RIE</span>
-                            <span class="skill-tag">FIB</span>
-                            <span class="skill-tag">Clean Room</span>
-                            <span class="skill-tag">Spectroscopy</span>
-                            <span class="skill-tag">SEM</span>
-                        </div>
-                    </div>
-                </div>
+
 
                 <div class="skill-category">
-                    <div class="skill-header" onclick="toggleSkill(this)">
-                        <span class="skill-name">Renewable Energy</span>
-                        <span class="skill-arrow">▼</span>
+
+                    <h4>Tools & Software</h4>
+
+                    <div class="skill-tags">
+
+                        <span class="skill-tag">MATLAB</span>
+
+                        <span class="skill-tag">Git</span>
+
+                        <span class="skill-tag">Linux/Unix</span>
+
+                        <span class="skill-tag">LaTeX</span>
+
+                        <span class="skill-tag">Jupyter</span>
+
+                        <span class="skill-tag">COMSOL</span>
+
                     </div>
-                    <div class="skill-details">
-                        <div class="skill-tags">
-                            <span class="skill-tag">Solar Cells</span>
-                            <span class="skill-tag">Photovoltaics</span>
-                            <span class="skill-tag">Energy Modeling</span>
-                            <span class="skill-tag">Performance Analysis</span>
-                        </div>
-                    </div>
+
                 </div>
+
+
+
+                <div class="skill-category">
+
+                    <h4>Specializations</h4>
+
+                    <div class="skill-tags">
+
+                        <span class="skill-tag">Renewable Energy</span>
+
+                        <span class="skill-tag">Nanofabrication</span>
+
+                        <span class="skill-tag">Spectroscopy</span>
+
+                        <span class="skill-tag">Policy Analysis</span>
+
+                    </div>
+
+                </div>
+
             </div>
+
+
+
+            <ul class="icons">
+
+                <li><a href="https://linkedin.com/in/daniel-farbowitz" target="_blank">LinkedIn</a></li>
+
+                <li><a href="https://github.com/farbowitz" target="_blank">GitHub</a></li>
+
+            </ul>
+
         </div>
 
-        <footer id="footer">
-            <div class="inner">
-                <ul class="icons">
-                    <li><a href="https://www.linkedin.com/in/daniel-farbowitz/" class="icon brands fa-linkedin">LinkedIn</a></li>
-                    <li><a href="https://github.com/farbowitz/" class="icon brands fa-github">Github</a></li>
-                </ul>
-                <ul class="copyright">
-                    <li>&copy; Daniel Farbowitz</li>
-                </ul>
-            </div>
-        </footer>
     </header>
 
-    <!-- Main -->
+
+
+    <!-- Main Content -->
+
     <div id="main">
-        <!-- Summary -->
+
         <section>
-            <p>Generalist researcher with diverse background in nanofabrication, renewable energy, and data analysis. Strong foundation in physics, mathematics, and solar cell technology with expertise in Python, R, and statistical modeling. Seeking to apply skills and continuous learning approach to data-driven policy, particularly as applied to renewable energy.</p>
-            <p><strong>Contact:</strong> farbowitz@gmail.com | Melbourne Beach, Florida, United States</p>
+
+            <p class="section-intro">Seeking to apply diverse research background and analytical skills to data-driven policy roles, particularly in renewable energy and sustainability initiatives globally.</p>
+
         </section>
 
-        <!-- Professional Experience -->
+
+
         <section>
+
             <h2>Professional Experience</h2>
-            
-            <div class="experience-item">
-                <div class="experience-header">
+
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
                     <h3>Adjunct Instructor</h3>
+
                 </div>
-                <p class="company">Benjamin Franklin Institute of Technology</p>
-                <p class="date-location">January 2019 – June 2021 | Boston, Massachusetts</p>
+
+                <div class="item-meta">
+
+                    <span class="company">Benjamin Franklin Institute of Technology</span> | Boston, Massachusetts
+
+                    <span class="date">January 2019 – June 2021</span>
+
+                </div>
+
                 <ul>
-                    <li>Developed curriculum content and delivered remote learning materials for undergraduate mathematics and physics courses (Fundamental Math, Geometry, Pre-Calculus, Physics I & II, Physics Concepts, Physics Lab)</li>
-                    <li>Implemented weekly discussion board component to foster student engagement and critical thinking</li>
-                    <li>Created and facilitated student-led faculty governance body (Senate) focused on accountability, antiracism, and equitable education</li>
+
+                    <li>Developed curriculum and delivered remote learning for undergraduate mathematics and physics courses (Fundamental Math, Geometry, Pre-Calculus, Physics I & II)</li>
+
+                    <li>Implemented weekly discussion components to foster student engagement and critical thinking</li>
+
+                    <li>Created student-led faculty governance body focused on accountability, antiracism, and equitable education</li>
+
                 </ul>
+
             </div>
 
-            <div class="experience-item">
-                <div class="experience-header">
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
                     <h3>Physics & Mathematics Tutor</h3>
+
                 </div>
-                <p class="company">Arbor Tutoring</p>
-                <p class="date-location">March 2011 – December 2018 | Allston, Massachusetts</p>
+
+                <div class="item-meta">
+
+                    <span class="company">Arbor Tutoring</span> | Allston, Massachusetts
+
+                    <span class="date">March 2011 – December 2018</span>
+
+                </div>
+
                 <ul>
-                    <li>Tutored physics and mathematics for university students on individual basis, tailoring learning plans and ongoing academic support to achieve minimum one letter grade improvement for all students</li>
+
+                    <li>Provided individualized physics and mathematics tutoring for university students, achieving minimum one letter grade improvement for all clients</li>
+
+                    <li>Tailored learning plans and ongoing academic support based on individual student needs</li>
+
                 </ul>
+
             </div>
 
-            <div class="experience-item">
-                <div class="experience-header">
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
                     <h3>Substitute Teacher</h3>
+
                 </div>
-                <p class="company">Somerville Public Schools</p>
-                <p class="date-location">November 2018 – January 2019 | Somerville, Massachusetts</p>
+
+                <div class="item-meta">
+
+                    <span class="company">Somerville Public Schools</span> | Somerville, Massachusetts
+
+                    <span class="date">November 2018 – January 2019</span>
+
+                </div>
+
                 <ul>
-                    <li>Managed classrooms of 12-14 students, delivering continuous science instruction, engaging students with interactive software demonstrations</li>
+
+                    <li>Managed classrooms of 12-14 students, delivering continuous science instruction with interactive software demonstrations</li>
+
                 </ul>
+
             </div>
+
         </section>
 
-        <!-- Education -->
+
+
         <section>
+
             <h2>Education</h2>
-            
-            <div class="experience-item">
-                <div class="experience-header">
-                    <h3>PhD Candidate (Nanophotonics, DTU Electro)</h3>
+
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
+                    <h3>PhD Candidate in Nanophotonics</h3>
+
                 </div>
-                <p class="company">Technical University of Denmark (DTU)</p>
-                <p class="date-location">October 2022 – July 2024 | Kongens Lyngby, Denmark</p>
+
+                <div class="item-meta">
+
+                    <span class="institution">Technical University of Denmark (DTU)</span> | Kongens Lyngby, Denmark
+
+                    <span class="date">October 2022 – July 2024</span>
+
+                </div>
+
                 <ul>
-                    <li>Simulated, fabricated, and measured electromechanically tunable nanophotonic devices using established clean room methodology</li>
+
+                    <li>Simulated, fabricated, and measured electromechanically tunable nanophotonic devices using clean room methodology</li>
+
                     <li>Designed proprietary cathodoluminescence system compatible with SEM and IMINA nanobot system</li>
-                    <li>Presented current results and relevant recent publications in alternating fashion on monthly basis</li>
-                    <li>Supported group by establishing collaborative partnerships at world-class institutions, providing peer review, and proofreading academic publications</li>
+
+                    <li>Established collaborative partnerships at world-class institutions, provided peer review and proofread academic publications</li>
+
                 </ul>
+
             </div>
 
-            <div class="experience-item">
-                <div class="experience-header">
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
                     <h3>MSc Solar Cell Technology (Distinction)</h3>
+
                 </div>
-                <p class="company">University of Sheffield</p>
-                <p class="date-location">October 2020 – September 2021 | Sheffield, United Kingdom</p>
+
+                <div class="item-meta">
+
+                    <span class="institution">University of Sheffield</span> | Sheffield, United Kingdom
+
+                    <span class="date">October 2020 – September 2021</span>
+
+                </div>
+
                 <ul>
-                    <li>Fabricated and tested nanoparticle ink solar materials, coordinating device use across three departments (Biology, Chemistry, Physics)</li>
+
+                    <li>Fabricated and tested nanoparticle ink solar materials, coordinating device use across three departments</li>
+
                     <li>Conducted comprehensive review on organic bulk heterojunction and nanoparticle solar cells</li>
-                    <li>Targeted charge generation in nanoparticle ink solar cells with femtosecond and nanosecond-scale transient absorption spectroscopy</li>
-                    <li>Performed prediction of solar cell output from changing climate conditions</li>
-                    <li>Gave cost/benefit analysis for hypothetical solar recycling business</li>
+
+                    <li>Utilized femtosecond and nanosecond-scale transient absorption spectroscopy for charge generation analysis</li>
+
+                    <li>Performed prediction modeling of solar cell output under changing climate conditions</li>
+
                 </ul>
+
             </div>
 
-            <div class="experience-item">
-                <div class="experience-header">
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
                     <h3>Photonics Graduate Studies</h3>
+
                 </div>
-                <p class="company">Johns Hopkins University</p>
-                <p class="date-location">September 2019 – June 2020 | Baltimore, Maryland</p>
+
+                <div class="item-meta">
+
+                    <span class="institution">Johns Hopkins University</span> | Baltimore, Maryland
+
+                    <span class="date">September 2019 – June 2020</span>
+
+                </div>
+
                 <ul>
+
                     <li>Studied light-matter interactions at the nanoscale</li>
-                    <li>Relevant Coursework: Quantum Mechanics III, Optical Design, Modern Physics, Global Environmental Sustainability</li>
+
+                    <li>Coursework: Quantum Mechanics III, Optical Design, Modern Physics, Global Environmental Sustainability</li>
+
                 </ul>
+
             </div>
 
-            <div class="experience-item">
-                <div class="experience-header">
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
                     <h3>BS Physics, BS Mathematics, BA Philosophy</h3>
+
                 </div>
-                <p class="company">Penn State University</p>
-                <p class="date-location">August 2007 – December 2011 | University Park, Pennsylvania</p>
+
+                <div class="item-meta">
+
+                    <span class="institution">Penn State University</span> | University Park, Pennsylvania
+
+                    <span class="date">August 2007 – December 2011</span>
+
+                </div>
+
                 <ul>
-                    <li>Relevant Coursework: Quantum Information, Advanced Analysis, Honors Discrete Mathematics, Technical Writing, Differential Equations, Philosophy of Education, Pragmatism</li>
+
+                    <li>Honors: Sigma Pi Sigma Physics Honor Society</li>
+
+                    <li>Key Coursework: Quantum Information, Advanced Analysis, Honors Discrete Mathematics</li>
+
                 </ul>
+
             </div>
 
-            <div class="experience-item">
-                <div class="experience-header">
-                    <h3>Summer Study Abroad</h3>
-                </div>
-                <p class="company">Philipps-Universität Marburg</p>
-                <p class="date-location">June-July 2008 | Marburg, Germany</p>
-                <ul>
-                    <li>Philosophy Department, Dotterer Fellowship recipient</li>
-                    <li>Relevant Coursework: German Language, EU Politics, European Literature</li>
-                </ul>
-            </div>
         </section>
 
-        <!-- Publications -->
+
+
         <section>
-            <h2>Publications</h2>
-            
-            <div class="publication">
-                <span class="pub-label">Conference Publications</span>
-                <p>Lepeshov, S.; Farbowitz, D.; Weis, T.; Hougs, N.; Heuck, M.; Lahijani, B.; Stobbe, S. "Nano-Electro-Mechanically-Tuneable Photonic Bowtie Cavities for Enhanced Light-Matter Interactions." <em>CLEO/Europe-EQEC 2025</em>, Munich, Germany, 2025, paper jpd_1_9.</p>
-            </div>
+
+            <h2>Research & Publications</h2>
+
+
 
             <div class="publication">
-                <span class="pub-label">Journal Publications</span>
-                <p>Lepeshov, S.; Farbowitz, D.; Weis, T.; Lu, B.; Lahijani, B.; Heuck, M.; Stobbe, S. "Nanoelectromechanical Spectral Control of Silicon Bowtie Nanocavities." <em>ACS Nano</em>, accepted.</p>
+
+                <span class="pub-type">Conference Publication</span>
+
+                <p>Lepeshov, S.; <strong>Farbowitz, D.</strong>; Weis, T.; Hougs, N.; Heuck, M.; Lahijani, B.; Stobbe, S. "Nano-Electro-Mechanically-Tuneable Photonic Bowtie Cavities for Enhanced Light-Matter Interactions." <em>CLEO/Europe-EQEC 2025</em>, Munich, Germany, 2025.</p>
+
             </div>
+
+
+
+            <div class="publication">
+
+                <span class="pub-type">Journal Publication</span>
+
+                <p>Lepeshov, S.; <strong>Farbowitz, D.</strong>; Weis, T.; Lu, B.; Lahijani, B.; Heuck, M.; Stobbe, S. "Nanoelectromechanical Spectral Control of Silicon Bowtie Nanocavities." <em>ACS Nano</em>, accepted.</p>
+
+            </div>
+
         </section>
 
-        <!-- Projects -->
+
+
         <section>
-            <h2>Projects</h2>
-            
-            <div class="experience-item">
-                <div class="experience-header">
+
+            <h2>Key Projects</h2>
+
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
                     <h3>American Anthropologist Journal Meta-Analysis</h3>
+
                 </div>
-                <p class="date-location">August 2021 - May 2022</p>
+
+                <div class="item-meta">
+
+                    <span class="date">August 2021 – May 2022</span>
+
+                </div>
+
                 <ul>
-                    <li>Scraped web data, converted PDFs to text, and applied analysis integrating PyResearchInsights library across 133-year journal history</li>
-                    <li>Applied machine learning, regression analysis, and natural language processing to identify publishing trends</li>
+
+                    <li>Scraped web data and converted PDFs to text across 133-year journal history</li>
+
+                    <li>Applied machine learning, regression analysis, and NLP using PyResearchInsights library to identify publishing trends</li>
+
                 </ul>
+
             </div>
 
-            <div class="experience-item">
-                <div class="experience-header">
-                    <h3>Automation Programming of Mass Spectroscopy Analysis via PCA</h3>
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
+                    <h3>Mass Spectroscopy Automation via PCA</h3>
+
                 </div>
-                <p class="date-location">October 2022 - December 2024</p>
+
+                <div class="item-meta">
+
+                    <span class="date">October 2022 – December 2024</span>
+
+                </div>
+
                 <ul>
-                    <li>Wrote Python code to isolate signals in MALDI-TOF XML and text data outputs (6000+ files)</li>
-                    <li>Implemented data merging and cleaning for species identification, creating visualizations of peak signal data using auto-correlation techniques</li>
-                    <li>Cross-verified results using existing SpecieScan GitHub project for biomarker identification in salmon and trout</li>
+
+                    <li>Developed Python pipeline to isolate signals in 6000+ MALDI-TOF XML and text data files</li>
+
+                    <li>Implemented data merging, cleaning, and visualization using auto-correlation techniques</li>
+
+                    <li>Cross-verified biomarker identification results for salmon and trout species</li>
+
                 </ul>
+
             </div>
+
         </section>
 
-        <!-- Professional Development -->
+
+
         <section>
-            <h2>Professional Development & Volunteer Experience</h2>
-            
-            <div class="experience-item">
-                <div class="experience-header">
+
+            <h2>Professional Development</h2>
+
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
                     <h3>Ratings/Impact Team Researcher</h3>
+
                 </div>
-                <p class="company">Bank Green</p>
-                <p class="date-location">September 2025 – Present | Remote</p>
+
+                <div class="item-meta">
+
+                    <span class="company">Bank Green</span> | Remote
+
+                    <span class="date">September 2025 – Present</span>
+
+                </div>
+
                 <ul>
-                    <li>Researched and reviewed 6 banks across different countries for sustainability ratings</li>
-                    <li>Resolved discrepancies between projects falsely listed as renewable energy initiatives</li>
-                    <li>Spearheaded initiative to include finding local sustainable banks by distance, creating early sample site from gathered public and local databases</li>
-                    <li>Assessed varying research methodologies to provide realistic approximation of CO2e generated from various valued actions</li>
+
+                    <li>Research and review banks across multiple countries for sustainability ratings</li>
+
+                    <li>Resolve discrepancies in renewable energy initiative classifications</li>
+
+                    <li>Assess research methodologies to approximate CO2e generation from various actions</li>
+
+                    <li>Develop local sustainable bank finder using public and local databases</li>
+
                 </ul>
+
             </div>
 
-            <div class="experience-item">
-                <div class="experience-header">
-                    <h3>Student</h3>
+
+
+            <div class="timeline-item">
+
+                <div class="item-header">
+
+                    <h3>MITx Online Courses</h3>
+
                 </div>
-                <p class="company">MITx Online</p>
-                <p class="date-location">August 2024 – March 2025</p>
+
+                <div class="item-meta">
+
+                    <span class="date">August 2024 – March 2025</span>
+
+                </div>
+
                 <ul>
-                    <li>Courses: Data Science, Economics, Policy Development (Good Economics for Hard Times, Data Analysis for Social Scientists, Designing and Running Randomized Evaluations)</li>
+
+                    <li>Completed: Good Economics for Hard Times, Data Analysis for Social Scientists, Designing and Running Randomized Evaluations</li>
+
                 </ul>
+
             </div>
 
-            <div class="experience-item">
-                <div class="experience-header">
-                    <h3>Student Representative (Physics PGT)</h3>
-                </div>
-                <p class="company">University of Sheffield</p>
-                <p class="date-location">November 2020 – September 2021 | Sheffield, United Kingdom</p>
-                <ul>
-                    <li>Addressed postgraduate physics student concerns, particularly with respect to online learning, with academic administration while liaising with Equality, Diversity, and Inclusion Committee</li>
-                </ul>
-            </div>
         </section>
 
-        <!-- Certifications -->
+
+
         <section>
-            <h2>Certifications & Honors</h2>
+
+            <h2>Certifications</h2>
+
             <ul class="cert-list">
+
                 <li>Laser Safety Certification</li>
+
                 <li>Chemical Handling Safety</li>
+
                 <li>Radiation Safety</li>
+
                 <li>Sigma Pi Sigma Physics Honor Society</li>
+
             </ul>
+
         </section>
 
-        <!-- Additional Interests -->
-        <section>
-            <h2>Additional Interests</h2>
-            <p>Music (Hip-hop, piano, vocal); Fitness (CrossFit, powerlifting, acroyoga); Mixed Martial Arts (Muay Thai, BJJ, wrestling)</p>
-        </section>
     </div>
 
-    <script>
-        function toggleSkill(header) {
-            const details = header.nextElementSibling;
-            const isExpanded = header.classList.contains('active');
-            
-            // Close all other skills
-            document.querySelectorAll('.skill-header').forEach(h => {
-                h.classList.remove('active');
-                h.nextElementSibling.classList.remove('expanded');
-            });
-            
-            // Toggle current skill
-            if (!isExpanded) {
-                header.classList.add('active');
-                details.classList.add('expanded');
-            }
-        }
-    </script>
 </body>
+
 </html>
